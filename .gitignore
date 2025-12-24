@@ -1,0 +1,142 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# iOS/Xcode related
+**/ios/**/*.mode1v3
+**/ios/**/*.mode2v3
+**/ios/**/*.moved-aside
+**/ios/**/*.pbxuser
+**/ios/**/*.perspectivev3
+**/ios/**/*sync/
+**/ios/**/.sconsign.dblite
+**/ios/**/.tags*
+**/ios/**/.vagrant/
+**/ios/**/DerivedData/
+**/ios/**/Icon?
+**/ios/**/Pods/
+**/ios/**/.symlinks/
+**/ios/**/profile
+**/ios/**/xcuserdata
+**/ios/.generated/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.flx
+**/ios/Flutter/app.zip
+**/ios/Flutter/flutter_assets/
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
+**/ios/Runner/Assets.xcassets/LaunchImage.imageset/Contents.json
+**/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md
+**/ios/Runner/Info.plist
+**/ios/Runner/Runner.xcodeproj/project.pbxproj
+**/ios/Runner/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+**/ios/Runner/xcshareddata/
+
+# Web related
+**/web/build/
+
+# macOS
+**/macos/**/*.h
+**/macos/**/*.m
+**/macos/**/Pods/
+**/macos/.generated/
+**/macos/Flutter/Flutter.framework
+**/macos/Flutter/Flutter.podspec
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/macos/Runner/
+**/macos/Runner/AppDelegate.swift
+**/macos/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json
+**/macos/Runner/Configs/AppInfo.plist
+**/macos/Runner/Configs/Debug.xcconfig
+**/macos/Runner/Configs/Release.xcconfig
+**/macos/Runner/Configs/Warning.xcconfig
+**/macos/Runner/DerivedData/
+**/macos/Runner/Info.plist
+**/macos/Runner/MainFlutterWindow.swift
+**/macos/Runner/base.lproj/MainMenu.xib
+**/macos/Runner/en.lproj/
+**/macos/Runner/project.pbxproj
+**/macos/Runner/xcodeproj/project.pbxproj
+**/macos/Runner/xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+**/macos/Runner/xcshareddata/
+
+# Windows
+**/windows/**/*.exp
+**/windows/**/*.ilk
+**/windows/**/*.obj
+**/windows/**/*.pdb
+**/windows/**/*.lib
+**/windows/**/*.pch
+**/windows/**/*.vcxproj
+**/windows/**/*.vcxproj.filters
+**/windows/**/*.vcxproj.user
+**/windows/generated/
+**/windows/Release/
+**/windows/x64/
+**/windows/x86/
+
+# Linux
+**/linux/**/*.o
+**/linux/**/*.a
+**/linux/**/*.so
+**/linux/.generated/
+**/linux/Runner/
+**/linux/Runner/CMakeLists.txt
+**/linux/Runner/Info.plist
+**/linux/Runner/base_linux/
+**/linux/Runner/main.cc
+**/linux/Runner/my_application.cc
+**/linux/Runner/my_application.h
+**/linux/Runner/*.desktop
+**/linux/Runner/*.service
+
+# Coverage
+coverage/
+
+# Exceptions
+*.glide
+pubspec.lock

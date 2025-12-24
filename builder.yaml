@@ -1,0 +1,49 @@
+# This file controls Flutter-level build settings. Potential values are "normal",
+# or "watcher", to map the watcher assistant to the build modes.
+#
+# For more information, see:
+# https://github.com/flutter/flutter/wiki/Experimental-Feature-Work-in progress
+# This feature is experimental and has been implemented with significant
+# limitations. For now, it remains experimental until the Flutter team can
+# complete the implementation.
+#
+# If this is disabled, the watcher will not be started.
+#
+# For more information, see:
+# https://github.com/flutter/flutter/issues/85225
+# builder: Watcher
+
+# The name of the builder.
+#
+# This value is used to identify the builder in the Flutter tool.
+# For example, `flutter build web --builder=my_builder`.
+# builder: my_builder
+
+# The path to the builder's main entry point, relative to the `--source` path.
+#
+# If the builder is a package from pub.dev, use `package:<package_name>:<entrypoint>`.
+# For a local builder, use a path relative to the `--source` path.
+#
+# If not specified, the default entry point for a builder is `lib/main.dart`.
+#
+# For more information, see:
+# https://github.com/flutter/flutter/wiki/Experimental-Feature-Work-in progress
+# main: lib/builder.dart
+
+# The directory where the builder should look for assets, relative to the `--source` path.
+#
+# If not specified, the builder's default assets directory is `assets`.
+#
+# For more information, see:
+# https://github.com/flutter/flutter/wiki/Experimental-Feature-Work-in progress
+# assets:
+#   - path: assets/
+#     for: my_builder
+
+# Whether to enable the builder.
+#
+# If not specified, the builder is enabled by default.
+#
+# For more information, see:
+# https://github.com/flutter/flutter/wiki/Experimental-Feature-Work-in progress
+# enabled: true
