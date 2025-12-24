@@ -25,6 +25,7 @@ class MarkdownViewerController extends GetxController {
     try {
       isLoading.value = true;
       errorMessage.value = '';
+      print('Loading file: $filePath');
 
       String content;
       
@@ -40,8 +41,10 @@ class MarkdownViewerController extends GetxController {
       }
 
       markdownContent.value = content;
+      print('File content loaded: ${content.substring(0, 100)}...');
     } catch (e) {
       errorMessage.value = 'Error loading file: $e';
+      print('Error loading file: $e');
     } finally {
       isLoading.value = false;
     }

@@ -1,5 +1,10 @@
 import 'package:get/get.dart';
 
+import '../controllers/home_controller.dart';
+import '../controllers/markdown_viewer_controller.dart';
+import '../screens/home_screen.dart';
+import '../screens/markdown_viewer_screen.dart';
+
 class AppPages {
   static const initial = Routes.home;
 

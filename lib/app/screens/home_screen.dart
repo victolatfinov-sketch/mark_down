@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:markdown_reader_mvp/app/controllers/home_controller.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:markdown_reader_mvp/app/routes/app_pages.dart';
+
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -64,9 +64,9 @@ class HomeScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(0.1),
+                        color: const Color.fromRGBO(255, 0, 0, 0.1),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.red.withOpacity(0.3)),
+                        border: Border.all(color: const Color.fromRGBO(255, 0, 0, 0.3)),
                       ),
                       child: Row(
                         children: [
@@ -112,31 +112,33 @@ class HomeScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
+                  color: const Color.fromRGBO(33, 150, 243, 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: Colors.blue, size: 28),
               ),
               const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
+                    const SizedBox(height: 4),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const Spacer(),
               const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 20),

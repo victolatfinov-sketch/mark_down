@@ -12,7 +12,6 @@ class AppTheme {
       seedColor: primaryColor,
       primary: primaryColor,
       secondary: secondaryColor,
-      background: backgroundColor,
       surface: surfaceColor,
       error: errorColor,
     ),
@@ -23,7 +22,7 @@ class AppTheme {
       foregroundColor: Colors.white,
       elevation: 0,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: surfaceColor,
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -52,8 +51,6 @@ class AppTheme {
       brightness: Brightness.dark,
       primary: primaryColor,
       secondary: secondaryColor,
-      background: Colors.grey[900]!,
-      surface: Colors.grey[850]!,
       error: errorColor,
     ),
     useMaterial3: true,
@@ -63,7 +60,7 @@ class AppTheme {
       foregroundColor: Colors.white,
       elevation: 0,
     ),
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: Colors.grey[850],
       elevation: 2,
       shape: RoundedRectangleBorder(

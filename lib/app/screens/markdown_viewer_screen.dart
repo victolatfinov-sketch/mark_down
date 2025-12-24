@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:markdown_reader_mvp/app/controllers/markdown_viewer_controller.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'dart:convert';
+import 'package:markdown/markdown.dart' hide Text;
+
+
 
 class MarkdownViewerScreen extends StatelessWidget {
   const MarkdownViewerScreen({super.key});
@@ -41,7 +42,7 @@ class MarkdownViewerScreen extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
-                    color: Colors.red.withOpacity(0.1),
+                    color: const Color.fromRGBO(255, 0, 0, 0.1),
                     child: Row(
                       children: [
                         const Icon(Icons.error, color: Colors.red),
@@ -60,16 +61,18 @@ class MarkdownViewerScreen extends StatelessWidget {
                     ),
                   ),
                 Expanded(
-                  child: controller.isLoading.value
-                      ? const Center(child: CircularProgressIndicator())
-                      : controller.markdownContent.isNotEmpty
-                          ? MarkdownViewer(
-                              content: controller.markdownContent.value,
-                              fontSize: controller.fontSize.value,
-                            )
-                          : const Center(
-                              child: Text('No content to display'),
-                            ),
+                  child: Obx(
+                    () => controller.isLoading.value
+                        ? const Center(child: CircularProgressIndicator())
+                        : controller.markdownContent.isNotEmpty
+                            ? MarkdownViewer(
+                                content: controller.markdownContent.value,
+                                fontSize: controller.fontSize.value,
+                              )
+                            : const Center(
+                                child: Text('No content to display'),
+                              ),
+                  ),
                 ),
               ],
             ),
@@ -102,7 +105,9 @@ class _MarkdownViewerState extends State<MarkdownViewer> {
       NavigationDelegate(
         onPageStarted: (String url) {},
         onPageFinished: (String url) {},
-        onWebResourceError: (WebResourceError error) {},
+        onWebResourceError: (WebResourceError error) {
+          print('Web resource error: ${error.description}');
+        },
       ),
     );
 
@@ -123,6 +128,7 @@ class _MarkdownViewerState extends State<MarkdownViewer> {
 
   void _loadContent() {
     final htmlContent = _generateHtmlContent(widget.content, widget.fontSize);
+    print('Generated HTML content: $htmlContent');
     _webViewController.loadHtmlString(
       htmlContent,
       baseUrl: 'assets://',
@@ -130,7 +136,16 @@ class _MarkdownViewerState extends State<MarkdownViewer> {
   }
 
   String _generateHtmlContent(String markdown, double fontSize) {
-    final processedMarkdown = _processMermaidBlocks(markdown);
+    final blocks = _processMermaidBlocks(markdown);
+    final buffer = StringBuffer();
+
+    for (final block in blocks) {
+      if (block['type'] == 'markdown') {
+        buffer.write(markdownToHtml(block['content']!));
+      } else if (block['type'] == 'mermaid') {
+        buffer.write('<div class="mermaid">${block['content']}</div>');
+      }
+    }
     
     return '''
 <!DOCTYPE html>
@@ -224,7 +239,7 @@ class _MarkdownViewerState extends State<MarkdownViewer> {
       table th { background-color: #2d2d2d; }
       table th, table td { border-color: #30363d; }
     }
-    .mermaid-container {
+    .mermaid {
       display: flex;
       justify-content: center;
       margin: 24px 0;
@@ -234,7 +249,7 @@ class _MarkdownViewerState extends State<MarkdownViewer> {
       min-height: 100px;
     }
     @media (prefers-color-scheme: dark) {
-      .mermaid-container { background-color: #2d2d2d; }
+      .mermaid { background-color: #2d2d2d; }
     }
     hr {
       height: 0.25em;
@@ -251,7 +266,7 @@ class _MarkdownViewerState extends State<MarkdownViewer> {
 </head>
 <body>
   <div id="content">
-    ${_convertMarkdownToHtml(processedMarkdown)}
+    ${buffer.toString()}
   </div>
   <script>
     mermaid.initialize({
@@ -266,77 +281,38 @@ class _MarkdownViewerState extends State<MarkdownViewer> {
 ''';
   }
 
-  String _processMermaidBlocks(String markdown) {
-    final buffer = StringBuffer();
+  List<Map<String, String>> _processMermaidBlocks(String markdown) {
+    final List<Map<String, String>> blocks = [];
     final lines = markdown.split('\n');
-    bool inCodeBlock = false;
-    bool isMermaid = false;
-    int braceCount = 0;
+    final buffer = StringBuffer();
+    bool inMermaidBlock = false;
 
-    for (int i = 0; i < lines.length; i++) {
-      final line = lines[i];
-
-      if (line.trim().startsWith('```')) {
-        if (!inCodeBlock) {
-          inCodeBlock = true;
-          final language = line.trim().substring(3);
-          isMermaid = language.toLowerCase() == 'mermaid';
-          if (isMermaid) {
-            buffer.write('<div class="mermaid-container"><pre class="mermaid">\n');
-          } else {
-            buffer.write('<pre><code>');
-          }
-        } else {
-          if (isMermaid) {
-            buffer.write('</pre></div>\n');
-          } else {
-            buffer.write('</code></pre>\n');
-          }
-          inCodeBlock = false;
-          isMermaid = false;
+    for (final line in lines) {
+      if (line.trim().startsWith('```mermaid')) {
+        if (buffer.isNotEmpty) {
+          blocks.add({'type': 'markdown', 'content': buffer.toString()});
+          buffer.clear();
         }
-      } else if (inCodeBlock) {
-        if (isMermaid) {
-          buffer.write(line);
-          buffer.write('\n');
-        } else {
-          buffer.write(_escapeHtml(line));
-          buffer.write('\n');
+        inMermaidBlock = true;
+        buffer.write(line.substring(line.indexOf('```mermaid') + '```mermaid'.length));
+        buffer.write('\n');
+      } else if (line.trim().startsWith('```') && inMermaidBlock) {
+        if (buffer.isNotEmpty) {
+          blocks.add({'type': 'mermaid', 'content': buffer.toString()});
+          buffer.clear();
         }
+        inMermaidBlock = false;
       } else {
         buffer.write(line);
         buffer.write('\n');
       }
     }
 
-    return buffer.toString();
-  }
+    if (buffer.isNotEmpty) {
+      blocks.add({'type': 'markdown', 'content': buffer.toString()});
+    }
 
-  String _convertMarkdownToHtml(String markdown) {
-    final html = markdown
-        .replaceAllMapped(RegExp(r'^### (.+)$', multiLine: true), (match) => '<h3>${match.group(1)}</h3>')
-        .replaceAllMapped(RegExp(r'^## (.+)$', multiLine: true), (match) => '<h2>${match.group(1)}</h2>')
-        .replaceAllMapped(RegExp(r'^# (.+)$', multiLine: true), (match) => '<h1>${match.group(1)}</h1>')
-        .replaceAllMapped(RegExp(r'\*\*(.+?)\*\*'), (match) => '<strong>${match.group(1)}</strong>')
-        .replaceAllMapped(RegExp(r'\*(.+?)\*'), (match) => '<em>${match.group(1)}</em>')
-        .replaceAllMapped(RegExp(r'`(.+?)`'), (match) => '<code>${match.group(1)}</code>')
-        .replaceAllMapped(RegExp(r'\[(.+?)\]\((.+?)\)'), (match) => '<a href="${match.group(2)}">${match.group(1)}</a>')
-        .replaceAllMapped(RegExp(r'^- (.+)$', multiLine: true), (match) => '<li>${match.group(1)}</li>')
-        .replaceAllMapped(RegExp(r'^\d+\. (.+)$', multiLine: true), (match) => '<li>${match.group(1)}</li>')
-        .replaceAllMapped(RegExp(r'^> (.+)$', multiLine: true), (match) => '<blockquote>${match.group(1)}</blockquote>')
-        .replaceAllMapped(RegExp(r'---'), (match) => '<hr>')
-        .replaceAllMapped(RegExp(r'\n\n'), (match) => '</p><p>');
-
-    return '<p>$html</p>'.replaceAll('<p></p>', '').replaceAll('<p><hr></p>', '<hr>');
-  }
-
-  String _escapeHtml(String text) {
-    return text
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
+    return blocks;
   }
 
   @override
